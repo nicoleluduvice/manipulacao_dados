@@ -1,0 +1,554 @@
+---
+title: "TIDYR & DPLYR"
+subtitle: "A dupla implacável"  
+author: 
+  - "Nicole Luduvice"
+date: 'Março de 2021'
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, xaringan-custom.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(base_color = "#03A696")
+```
+
+## Sobre mim
+
+* [2017] Estudante de graduação de Estatística no IME-USP
+
+* [2020] Estagiaria na [Curso-R](https://curso-r.com/)/R6 consultoria
+
+* [2021] [Terranova Jurimetria](https://trnv.com.br/)
+
+* RLadies São Paulo <3
+
+<br>
+
+Contato:
+
+linken
+telegran?
+
+---
+
+<!-- ## Sobre o curso -->
+
+<!-- * meio do curso vai ter uma pausa -->
+<!-- * Exercícios durante o curso  -->
+<!-- * Podem fazer perguntar pelo chat ou ligar o microfone -->
+
+## Tidyverse
+
+* Coleção de pacotes para ciência de dados 
+
+
+*  Estes pacotes tem filosofia, gramática e estruturas de dados  em comum (criadas para um pacote trabalhar em conjunto com o outro além de que quando voce aprende a usar um pacote, aprender a usar os outros pacotes do tidyverse se torna muito mais tranquilo)
+
+* Facilita MUITOOO o trabalho do cientista de dados :)
+
+<br>
+ <center><img src='https://avatars.githubusercontent.com/u/22032646?s=200&v=4'></div> <center>
+---
+class: middle
+
+## Principais Pacotes
+
+.pull-left[
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/2c6239d311be6d037c251c71c3902792f8c4ddd2/12f67/css/images/hex/ggplot2.png" width="100px" float='left'>
+<div><p>ggplot2: criar gráficos</p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/621a9c8c5d7b47c4b6d72e8f01f28d14310e8370/193fc/css/images/hex/dplyr.png" width="100px" float='left'>
+<div><p>dplyr: manipular dados</p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/476fa4025501dcec05be08248b32d390dd2337d5/574c6/css/images/hex/tidyr.png" width="100px" float='left'>
+<div><p>tidyr: Arrumar (<i>tidy</i>) os dados</p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/c1c91484f898fe9d7d90a570900f1d5cd703fe2e/d7df4/css/images/hex/readr.png" width="100px" float='left'>
+<div><p>readr: Ler dados retangulares (csv,tsv e fwf)</p></div>
+</div>
+]
+
+.pull-right[
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/2d0701b616efa7435cd5a94e703baa595a4f9ed0/d41b9/css/images/hex/purrr.png" width="100px" float='left'>
+<div><p>purrr: Completa e consistente ferramentas para trabalhar com funções e vetores</p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/c477d7eb7fdf2c3d75637cfe19ff4a4d0a107bcf/017d0/css/images/hex/tibble.png" width="100px" float='left'>
+<div><p>tibble: </p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/45fd04ad9cdb2159fea08d07dbc11e742d68e4e3/df327/css/images/hex/stringr.png" width="100px" float='left'>
+<div><p>stringr: Lidar com strings</p></div>
+</div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/412a6f14518ab633a94221dda7e16cf22e43a763/91620/css/images/hex/forcats.png" width="100px" float='left'>
+<div><p>forcats: Lidar com fatores</p></div>
+</div>
+]
+---
+
+## Tibble `tbl_df`
+
+- Diversas funções do `dplyr` e `tidyr` recebem uma data frame(`data.frame` ou `tbl_df`) e retornam uma tibble 
+
+- Tibbles são data frames com melhorias
+
+* Principal diferença (data.frame vs. tibble): forma em que a data frame é apresentada no console
+
+<br>
+
+<center><img src="https://d33wubrfki0l68.cloudfront.net/c477d7eb7fdf2c3d75637cfe19ff4a4d0a107bcf/017d0/css/images/hex/tibble.png" width="200px"><center>
+
+---
+
+
+<div class="tamanho-tibble">
+.pull-right[
+##### tibble
+
+```{r echo=FALSE}
+iris_tbl <- tibble::as_tibble(iris)
+iris_tbl
+```
+]
+</div>
+
+<div class="tamanho-tibble">
+.pull-left[
+##### data.frame
+
+```{r echo=FALSE, class.source="tamanho-tibble"}
+iris
+```
+]
+</div>
+
+---
+
+## Pipe  %>% 
+
+* Atalho: Control + Shift + M 
+
+* As funções do tidyverse foram projetadas para serem usadas com o operador %>% 
+
+* Avalia o código do lado esquerdo e passa o resultado como o primeiro argumento do código do lado direito
+
+
+
+<br>
+
+<center><img src="https://magrittr.tidyverse.org/logo.png"><center width="200px">
+---
+
+<br>
+
+* As linhas abaixo são equivalentes
+
+
+```{r include=FALSE}
+library(dplyr)
+```
+
+```{r}
+x <- c(1.234, 2.4536, 3.442, 3.24, 1.2223)
+
+sum(round(mean(x),2),5)
+
+x %>% mean() %>% round(2) %>% sum(5)
+```
+---
+
+## Dados
+
+* Para os exercicios
+  * Netflix
+  
+```{r}
+# readr::read_csv("../netflix_titles.csv")
+```
+
+  
+* Para os exemplos:
+  * idk yet
+  
+  
+  
+---
+class: inverse center middle
+
+# DPLYR
+
+---
+
+## `dplyr()`
+
+---
+class: inverse center middle
+
+# TIDYR
+
+---
+
+## `tidyr`
+
+* Os pacotes do tidyverse foram criados para usar e retornar dados arrumados (*tidy*) sempre que apropriado.
+
+* O pacote `tidyr`possui funções para deixar os dados no formato *tidy*
+
+* Dados *tidy* estão organizados de forma que:
+
+  * cada coluna é uma variável;
+  * cada linha é uma observação;
+  * cada célula representa um único valor.
+
+  
+  <center><img src="https://d33wubrfki0l68.cloudfront.net/476fa4025501dcec05be08248b32d390dd2337d5/574c6/css/images/hex/tidyr.png" width="200px"><center>
+
+---
+## `pivot_longer()`
+
+* Em casos mais simples equivale ao `gather()`
+
+* Alonga/empilha os dados
+<br>
+
+<img>
+
+---
+
+Exemplo
+
+---
+
+outros argumentos interessantes
+
+---
+
+## `pivot_wider`
+* Em casos mais simples equivale à antiga função `spread()`
+
+* Alarga/espalha os dados 
+<br>
+
+<img>
+
+---
+
+Exemplo
+
+---
+
+Outros argumentos interessantes
+
+---
+
+## `separate()`
+
+---
+
+## `unite`
+
+---
+
+## `unnest()`
+
+---
+
+## `nest()`
+
+---
+
+## Referências
+
+* [A tidyverse Cookbook](https://rstudio-education.github.io/tidyverse-cookbook/how-to-use-this-book.html#tidy-data)
+
+* [Livro da Curso-R](https://livro.curso-r.com/7-manipulacao.html)
+
+* [R for data science](https://r4ds.had.co.nz/tibbles.html)
+
+
+
+<!-- - Ipsum dis nec porttitor urna sed -->
+
+<!-- --- -->
+<!-- name: colors -->
+
+<!-- ## Colors -->
+
+<!-- - <span style="color: var(--text-color)">Text Color</span> -->
+
+<!-- - <span style="color: var(--header-color); font-family: var(--header-font-family);">Header Color</span> -->
+
+<!-- - <span style="color: var(--link-color)">Link Color</span> -->
+
+<!-- - <span style="color: var(--text-bold-color); font-weight: bold;">Bold Color</span> -->
+
+<!-- - `inline code color` -->
+
+<!-- --- -->
+
+<!-- # Big Topic or Inverse Slides `#` -->
+
+<!-- ## Slide Headings `##` -->
+
+<!-- ### Sub-slide Headings `###` -->
+
+<!-- #### Bold Call-Out `####` -->
+
+<!-- This is a normal paragraph text. Only use header levels 1-4. -->
+
+<!-- ##### Possible, but not recommended `#####` -->
+
+<!-- ###### Definitely don't use h6 `######` -->
+
+<!-- --- -->
+<!-- class: inverse center middle -->
+
+<!-- # Topic Changing Interstitial -->
+
+<!-- -- -->
+
+<!-- ``` -->
+<!-- class: inverse center middle -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- layout: true -->
+
+<!-- ## Blocks -->
+
+<!-- --- -->
+
+<!-- ### Blockquote -->
+
+<!-- > This is a blockquote following a header. -->
+<!-- > -->
+<!-- > When something is important enough, you do it even if the odds are not in your favor. -->
+
+<!-- --- -->
+
+<!-- ### Code Blocks -->
+
+<!-- #### R Code -->
+
+<!-- ```{r eval=FALSE} -->
+<!-- ggplot(gapminder) + -->
+<!--   aes(x = gdpPercap, y = lifeExp, size = pop, color = country) + -->
+<!--   geom_point() + -->
+<!--   facet_wrap(~year) -->
+<!-- ``` -->
+
+<!-- #### JavaScript -->
+
+<!-- ```js -->
+<!-- var fun = function lang(l) { -->
+<!--   dateformat.i18n = require('./lang/' + l) -->
+<!--   return true; -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ### More R Code -->
+
+<!-- ```{r eval=FALSE} -->
+<!-- dplyr::starwars %>% dplyr::slice_sample(n = 4) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r message=TRUE} -->
+<!-- cli::cli_alert_success("It worked!") -->
+<!-- ``` -->
+
+<!-- -- -->
+
+<!-- ```{r message=TRUE} -->
+<!-- message("Just a friendly message") -->
+<!-- ``` -->
+
+<!-- -- -->
+
+<!-- ```{r warning=TRUE} -->
+<!-- warning("This could be bad...") -->
+<!-- ``` -->
+
+<!-- -- -->
+
+<!-- ```{r error=TRUE} -->
+<!-- stop("I hope you're sitting down for this") -->
+<!-- ``` -->
+
+
+<!-- --- -->
+<!-- layout: true -->
+
+<!-- ## Tables -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- tibble::as_tibble(mtcars) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- knitr::kable(head(mtcars), format = 'html') -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4)) -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- layout: true -->
+
+<!-- ## Lists -->
+
+<!-- --- -->
+
+<!-- .pull-left[ -->
+<!-- #### Here is an unordered list: -->
+
+<!-- *   Item foo -->
+<!-- *   Item bar -->
+<!-- *   Item baz -->
+<!-- *   Item zip -->
+<!-- ] -->
+
+<!-- .pull-right[ -->
+
+<!-- #### And an ordered list: -->
+
+<!-- 1.  Item one -->
+<!-- 1.  Item two -->
+<!-- 1.  Item three -->
+<!-- 1.  Item four -->
+<!-- ] -->
+
+<!-- --- -->
+
+<!-- ### And a nested list: -->
+
+<!-- - level 1 item -->
+<!--   - level 2 item -->
+<!--   - level 2 item -->
+<!--     - level 3 item -->
+<!--     - level 3 item -->
+<!-- - level 1 item -->
+<!--   - level 2 item -->
+<!--   - level 2 item -->
+<!--   - level 2 item -->
+<!-- - level 1 item -->
+<!--   - level 2 item -->
+<!--   - level 2 item -->
+<!-- - level 1 item -->
+
+<!-- --- -->
+
+<!-- ### Nesting an ol in ul in an ol -->
+
+<!-- - level 1 item (ul) -->
+<!--   1. level 2 item (ol) -->
+<!--   1. level 2 item (ol) -->
+<!--     - level 3 item (ul) -->
+<!--     - level 3 item (ul) -->
+<!-- - level 1 item (ul) -->
+<!--   1. level 2 item (ol) -->
+<!--   1. level 2 item (ol) -->
+<!--     - level 3 item (ul) -->
+<!--     - level 3 item (ul) -->
+<!--   1. level 4 item (ol) -->
+<!--   1. level 4 item (ol) -->
+<!--     - level 3 item (ul) -->
+<!--     - level 3 item (ul) -->
+<!-- - level 1 item (ul) -->
+
+<!-- --- -->
+<!-- layout: true -->
+
+<!-- ## Plots -->
+
+<!-- --- -->
+
+<!-- ```{r plot-example} -->
+<!-- library(ggplot2) -->
+<!-- (g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point()) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r plot-example-themed} -->
+<!-- g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) + -->
+<!--   ggtitle("A Plot About Cars") -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- layout: false -->
+
+<!-- ## Square image -->
+
+<!-- <center><img src="https://octodex.github.com/images/labtocat.png" height="400px" /></center> -->
+
+<!-- .footnote[GitHub Octocat] -->
+
+<!-- --- -->
+
+<!-- ### Wide image -->
+
+<!-- ![](https://guides.github.com/activities/hello-world/branching.png) -->
+
+<!-- .footnote[Wide images scale to 100% slide width] -->
+
+<!-- --- -->
+
+<!-- ## Two images -->
+
+<!-- .pull-left[ -->
+<!-- ![](https://octodex.github.com/images/motherhubbertocat.png) -->
+]
+
+]
+
+---
+class: center, middle
+
+# Obrigada!
+
+

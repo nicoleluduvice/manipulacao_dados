@@ -1,0 +1,17 @@
+
+
+.flex-favicon{
+        display: flex;
+        align-items: center;
+        width: 500px;
+        padding-bottom:10px;
+}
+
+.flex-favicon div{
+
+  margin-left: 30px
+}
+
+.tamanho-tibble .remark-code{
+  font-size: 13px !important;
+}
