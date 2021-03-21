@@ -4,6 +4,7 @@
     <title>TIDYR &amp; DPLYR</title>
     <meta charset="utf-8" />
     <meta name="author" content="Nicole Luduvice" />
+    <script src="slide_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-custom.css" type="text/css" />
   </head>
@@ -153,7 +154,7 @@ class: middle
 ##  8          5           3.4          1.5         0.2 setosa 
 ##  9          4.4         2.9          1.4         0.2 setosa 
 ## 10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 ]
 &lt;/div&gt;
@@ -369,6 +370,24 @@ x %&gt;% mean() %&gt;% round(2) %&gt;% sum(5)
 
 ```r
 iris &lt;- tibble::as_tibble(iris) %&gt;% tibble::rowid_to_column()
+iris
+```
+
+```
+## # A tibble: 150 x 6
+##    rowid Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##    &lt;int&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1     1          5.1         3.5          1.4         0.2 setosa 
+##  2     2          4.9         3            1.4         0.2 setosa 
+##  3     3          4.7         3.2          1.3         0.2 setosa 
+##  4     4          4.6         3.1          1.5         0.2 setosa 
+##  5     5          5           3.6          1.4         0.2 setosa 
+##  6     6          5.4         3.9          1.7         0.4 setosa 
+##  7     7          4.6         3.4          1.4         0.3 setosa 
+##  8     8          5           3.4          1.5         0.2 setosa 
+##  9     9          4.4         2.9          1.4         0.2 setosa 
+## 10    10          4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
 ```
 
 ---
@@ -426,7 +445,7 @@ iris %&gt;% select(Sepal.Length:Sepal.Width)
 ##  8          5           3.4
 ##  9          4.4         2.9
 ## 10          4.9         3.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -459,7 +478,7 @@ iris %&gt;% select(starts_with("Petal"))
 ##  8          1.5         0.2
 ##  9          1.4         0.2
 ## 10          1.5         0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -486,7 +505,7 @@ iris %&gt;% select(-Species)
 ##  8     8          5           3.4          1.5         0.2
 ##  9     9          4.4         2.9          1.4         0.2
 ## 10    10          4.9         3.1          1.5         0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -514,7 +533,7 @@ iris %&gt;% relocate(Species, .before = Petal.Length)
 ##  8     8          5           3.4 setosa           1.5         0.2
 ##  9     9          4.4         2.9 setosa           1.4         0.2
 ## 10    10          4.9         3.1 setosa           1.5         0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 ---
 &lt;br&gt;
@@ -540,7 +559,7 @@ iris %&gt;% relocate(Species, .after = Petal.Length)
 ##  8     8          5           3.4          1.5 setosa          0.2
 ##  9     9          4.4         2.9          1.4 setosa          0.2
 ## 10    10          4.9         3.1          1.5 setosa          0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 &lt;br&gt;
@@ -575,7 +594,7 @@ iris %&gt;% arrange(Sepal.Length)
 ##  8    23          4.6         3.6          1           0.2 setosa 
 ##  9    48          4.6         3.2          1.4         0.2 setosa 
 ## 10     3          4.7         3.2          1.3         0.2 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -602,7 +621,7 @@ iris %&gt;% arrange(desc(Sepal.Length))
 ##  8   108          7.3         2.9          6.3         1.8 virginica
 ##  9   110          7.2         3.6          6.1         2.5 virginica
 ## 10   126          7.2         3.2          6           1.8 virginica
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -629,7 +648,7 @@ iris %&gt;% arrange(Species, Sepal.Length)
 ##  8    23          4.6         3.6          1           0.2 setosa 
 ##  9    48          4.6         3.2          1.4         0.2 setosa 
 ## 10     3          4.7         3.2          1.3         0.2 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -657,7 +676,7 @@ iris %&gt;% filter(Petal.Length &lt;= 2)
 ##  8     8          5           3.4          1.5         0.2 setosa 
 ##  9     9          4.4         2.9          1.4         0.2 setosa 
 ## 10    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 40 more rows
+## # … with 40 more rows
 ```
 ---
 
@@ -683,7 +702,7 @@ iris %&gt;% filter(Species == "setosa", Sepal.Length &lt;= 5)
 ##  8    10          4.9         3.1          1.5         0.1 setosa 
 ##  9    12          4.8         3.4          1.6         0.2 setosa 
 ## 10    13          4.8         3            1.4         0.1 setosa 
-## # ... with 18 more rows
+## # … with 18 more rows
 ```
 
 ---
@@ -709,7 +728,7 @@ iris %&gt;% filter(Species %in% c("setosa", "versicolor"))
 ##  8     8          5           3.4          1.5         0.2 setosa 
 ##  9     9          4.4         2.9          1.4         0.2 setosa 
 ## 10    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 90 more rows
+## # … with 90 more rows
 ```
 ---
 &lt;br&gt;
@@ -774,7 +793,7 @@ iris %&gt;%
 ##  8     8           50          34           15           2 setosa 
 ##  9     9           44          29           14           2 setosa 
 ## 10    10           49          31           15           1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 ---
 &lt;br&gt;
@@ -802,7 +821,7 @@ iris %&gt;%
 ##  8     8          5           3.4          1.5         0.2 setosa 
 ##  9     9          4.4         2.9          1.4         0.2 setosa 
 ## 10    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows, and 4 more variables: Sepal.Length_mm &lt;dbl&gt;,
+## # … with 140 more rows, and 4 more variables: Sepal.Length_mm &lt;dbl&gt;,
 ## #   Sepal.Width_mm &lt;dbl&gt;, Petal.Length_mm &lt;dbl&gt;, Petal.Width_mm &lt;dbl&gt;
 ```
 
@@ -831,7 +850,7 @@ iris %&gt;%
 ##  8 cm                 8          5           3.4          1.5         0.2
 ##  9 cm                 9          4.4         2.9          1.4         0.2
 ## 10 cm                10          4.9         3.1          1.5         0.1
-## # ... with 140 more rows, and 1 more variable: Species &lt;fct&gt;
+## # … with 140 more rows, and 1 more variable: Species &lt;fct&gt;
 ```
 ---
 
@@ -1026,7 +1045,7 @@ iris %&gt;% transmute(
 ##  8              50             34              15              2
 ##  9              44             29              14              2
 ## 10              49             31              15              1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1083,7 +1102,7 @@ iris %&gt;% group_by(Species)
 ##  8     8          5           3.4          1.5         0.2 setosa 
 ##  9     9          4.4         2.9          1.4         0.2 setosa 
 ## 10    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1118,11 +1137,11 @@ iris %&gt;%
 
 ```
 ## # A tibble: 3 x 6
-##   Species media_sepal_len~ sd_sepal_lenght media_sepal_wid~ sd_sepal_width     n
+##   Species media_sepal_len… sd_sepal_lenght media_sepal_wid… sd_sepal_width     n
 ##   &lt;fct&gt;              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;          &lt;dbl&gt; &lt;int&gt;
 ## 1 setosa              5.01           0.352             3.43          0.379    50
-## 2 versic~             5.94           0.516             2.77          0.314    50
-## 3 virgin~             6.59           0.636             2.97          0.322    50
+## 2 versic…             5.94           0.516             2.77          0.314    50
+## 3 virgin…             6.59           0.636             2.97          0.322    50
 ```
 ---
 ## `across()`
@@ -1232,7 +1251,7 @@ iris %&gt;%
 ##  8     8 5            3.4                  1.5         0.2 setosa 
 ##  9     9 4.4          2.9                  1.4         0.2 setosa 
 ## 10    10 4.9          3.1                  1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 ---
 ## `bind_rows()`
@@ -1263,7 +1282,7 @@ iris %&gt;% bind_rows(nova_df)
 ##  8     8          5           3.4          1.5         0.2 setosa 
 ##  9     9          4.4         2.9          1.4         0.2 setosa 
 ## 10    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 143 more rows
+## # … with 143 more rows
 ```
 
 
@@ -1291,7 +1310,7 @@ dados_pais
 ##  8 Maine, USA
 ##  9 Maine, USA
 ## 10 Maine, USA
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1318,7 +1337,7 @@ iris %&gt;%
 ##  8 Maine, USA     8          5           3.4          1.5         0.2 setosa 
 ##  9 Maine, USA     9          4.4         2.9          1.4         0.2 setosa 
 ## 10 Maine, USA    10          4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 &lt;br&gt;
 .footnote[**Obs:** Essas colunas devem sempre ter a mesma quantidade de linhas e (pra fazer sentido) elas devem ter as linhas de um data frame correspondendo com as linhas do outro data frame]
@@ -1398,7 +1417,7 @@ iris_pais
 ##  8     8          5           3.4          1.5         0.2 setosa  Maine, USA
 ##  9     9          4.4         2.9          1.4         0.2 setosa  Maine, USA
 ## 10    10          4.9         3.1          1.5         0.1 setosa  Maine, USA
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1492,7 +1511,7 @@ iris_longer
 ##  8     2 setosa  Maine, USA Petal.Width      0.2
 ##  9     3 setosa  Maine, USA Sepal.Length     4.7
 ## 10     3 setosa  Maine, USA Sepal.Width      3.2
-## # ... with 590 more rows
+## # … with 590 more rows
 ```
 
 
@@ -1528,7 +1547,7 @@ iris_longer %&gt;%
 ##  8     8          5           3.4          1.5         0.2
 ##  9     9          4.4         2.9          1.4         0.2
 ## 10    10          4.9         3.1          1.5         0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 
@@ -1561,7 +1580,7 @@ iris_sep
 ##  8     8 Maine  USA            5           3.4          1.5         0.2 setosa 
 ##  9     9 Maine  USA            4.4         2.9          1.4         0.2 setosa 
 ## 10    10 Maine  USA            4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1590,7 +1609,7 @@ iris_sep %&gt;%
 ##  8     8 Maine, USA          5           3.4          1.5         0.2 setosa 
 ##  9     9 Maine, USA          4.4         2.9          1.4         0.2 setosa 
 ## 10    10 Maine, USA          4.9         3.1          1.5         0.1 setosa 
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1616,9 +1635,9 @@ iris %&gt;% group_by(Species) %&gt;% nest()
 ## # Groups:   Species [3]
 ##   Species    data             
 ##   &lt;fct&gt;      &lt;list&gt;           
-## 1 setosa     &lt;tibble [50 x 5]&gt;
-## 2 versicolor &lt;tibble [50 x 5]&gt;
-## 3 virginica  &lt;tibble [50 x 5]&gt;
+## 1 setosa     &lt;tibble [50 × 5]&gt;
+## 2 versicolor &lt;tibble [50 × 5]&gt;
+## 3 virginica  &lt;tibble [50 × 5]&gt;
 ```
 
 ---
@@ -1647,7 +1666,7 @@ iris_nest %&gt;%
 ##  8 setosa      8          5           3.4          1.5         0.2
 ##  9 setosa      9          4.4         2.9          1.4         0.2
 ## 10 setosa     10          4.9         3.1          1.5         0.1
-## # ... with 140 more rows
+## # … with 140 more rows
 ```
 
 ---
@@ -1679,6 +1698,8 @@ class: inverse center middle
 class: center, middle
 
 # Obrigada!
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

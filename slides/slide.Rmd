@@ -206,6 +206,7 @@ x %>% mean() %>% round(2) %>% sum(5)
 #### Iris
 ```{r}
 iris <- tibble::as_tibble(iris) %>% tibble::rowid_to_column()
+iris
 ```
 
 ---
