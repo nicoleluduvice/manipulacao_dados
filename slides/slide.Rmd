@@ -205,14 +205,9 @@ x %>% mean() %>% round(2) %>% sum(5)
 
 #### Iris
 ```{r}
-iris <- tibble::as.tibble(iris)
+iris <- tibble::as_tibble(iris) %>% tibble::rowid_to_column()
 ```
-  
----
-<br>
 
-#### Chuva
-  
 ---
 class: inverse center middle
 
@@ -437,7 +432,7 @@ df %>%
 
 ---
 <br>
-* case_when: generalização do if_else()
+* case_when: generalização do `if_else()`
 ```{r}
 df %>% 
   mutate(
@@ -581,7 +576,73 @@ iris %>%
   ) %>% 
   ungroup()
 ```
+---
+## `across()`
 
+* Substitui a familia `*_all()`, `*_if()` e `*_at()`
+
+* Facilita fazer operações em várias colunas
+
+* `across(colunas, função, argumentos_adicionais, nomes_das_colunas)`
+
+```{r}
+iris %>% 
+  summarise(
+    across(
+      .cols = c(Sepal.Width, Sepal.Length),
+      .fns = sum,
+      na.rm = TRUE,
+      .names = "soma_{.col}"
+    )
+  )
+```
+
+.footnote[**Obs:** O `across()` pode ser utilizado em todos os verbos do `dplyr` menos `select()` e `rename()`]
+
+---
+<br>
+Se o argumento `.cols`não for fornecido, todas as colunas serão selecionadas
+```{r}
+iris %>% summarise(
+  across(.fns = n_distinct)
+)
+```
+---
+<br>
+Podemos colocar mais de uma função para ser aplicada nas colunas 
+```{r eval = FALSE}
+iris %>% 
+  summarise(
+    media_sepal_lenght = mean(Sepal.Length),
+    sd_sepal_lenght = sd(Sepal.Length),
+    media_sepal_width = mean(Sepal.Width),
+    sd_sepal_width = sd(Sepal.Width),
+    n = n()
+  )
+```
+
+
+```{r}
+iris %>% 
+  summarise(
+    across(
+      starts_with("Sepal"),
+      .fns = list(mean = mean, sd = sd)
+    )
+  )
+```
+
+---
+<br>
+Também é possível selecionar colunas a partir de testes lógico. Para isso usamos a 
+função `where()`
+
+```{r}
+iris %>% 
+  mutate(
+    across(where(is.numeric) & starts_with("Sepal"), as.character)
+  )
+```
 ---
 ## `bind_rows()`
 
@@ -672,10 +733,29 @@ iris_pais
 ```
 
 ---
-## across e rowwise?
----
 
-# Exercicios de manipulação
+## Exemplo "prático" - pipe
+
+```{r eval=FALSE}
+iris %>% 
+  filter(Petal.Length < 5) %>% 
+  left_join(dicio_iris, by = "Species") %>% 
+  mutate(
+    across(contains("l."), ~.x*10, .names = "{col}_mm"),
+    pais =factor(pais, levels = c("Fortaleza, Brasil", "Ottawa, Canada", "Maine, USA"))
+  ) %>% 
+  group_by(Species) %>% 
+  summarise(
+    across(ends_with("_mm"), list(mean = mean, sd = sd), na.rm = TRUE),
+    n = n(),
+    diferentes_paises = n_distinct(pais)
+  )
+```
+
+---
+class: inverse center middle
+
+# Exercicios 
 
 ---
 
@@ -731,17 +811,13 @@ iris_longer
 
 ---
 
-outros argumentos interessantes
-
----
-
 ## `pivot_wider`
 * Em casos mais simples equivale à antiga função `spread()`
 
 * Alarga/espalha os dados 
 <br>
 
-<center><img src="img/wider.jpeg" width="670px"><center>
+<center><img src="imgs/wider.jpeg" width="670px"><center>
 
 ---
 
@@ -750,10 +826,6 @@ iris_longer %>%
   pivot_wider(id_cols = rowid, names_from = partes, values_from = medidas)
 ```
 
-
----
-
-Outros argumentos interessantes
 
 ---
 
@@ -808,6 +880,11 @@ iris_nest %>%
 ```
 
 ---
+class: inverse center middle
+
+# Exercicios
+
+---
 
 ## Referências
 
@@ -819,8 +896,9 @@ iris_nest %>%
 
 * [Join com dplyr](https://rpubs.com/CristianaFreitas/311735)
 
-* [ slide topp]
-* fonte fotos pivot(https://www.garrickadenbuie.com/project/tidyexplain/#spread-and-gather%22)
+* [ slide topp](https://github.com/rstudio/webinars/blob/master/05-Data-Wrangling-with-R-and-RStudio/wrangling-webinar.pdf)
+
+* [Fotos pivot](https://www.garrickadenbuie.com/project/tidyexplain/#spread-and-gather%22)
 
 
 
@@ -830,5 +908,5 @@ iris_nest %>%
 class: center, middle
 
 # Obrigada!
-.footnote[GitHub Octocat]
+
 
