@@ -25,8 +25,7 @@ knitr::opts_chunk$set(
   message = FALSE, 
   warning = FALSE,
   fig.show = TRUE,
-  hiline = TRUE,
-  eval = FALSE
+  hiline = TRUE
 )
 ```
 
@@ -37,20 +36,26 @@ style_mono_accent(base_color = "#03A696")
 
 ## Sobre mim
 
+<img style="float:right;margin-right:120px;" src="imgs/foto.jpeg" width="240px">
+
+
 * [2017] Estudante de graduação de Estatística no IME-USP
 
 * [2020] Estagiaria na [Curso-R](https://curso-r.com/)/R6 consultoria
 
 * [2021] [Terranova Jurimetria](https://trnv.com.br/)
 
-* RLadies São Paulo <3
+* [RLadies São Paulo <3](https://www.meetup.com/pt-BR/rladies-sao-paulo/)
 
 <br>
 
 Contato:
 
-linken
-telegran?
+[Linkedin:](https://www.linkedin.com/in/nicole-luduvice-9a6379197/?originalSubdomain=br) Nicole Luduvice 
+
+e-mail: nzluduvice@gmail.com
+
+
 
 ---
 
@@ -101,13 +106,9 @@ class: middle
 .pull-right[
 <div class='flex-favicon'>
 <img src="https://d33wubrfki0l68.cloudfront.net/2d0701b616efa7435cd5a94e703baa595a4f9ed0/d41b9/css/images/hex/purrr.png" width="100px" float='left'>
-<div><p>purrr: Completa e consistente ferramentas para trabalhar com funções e vetores</p></div>
+<div><p>purrr: fornecer kit completo de ferramentas para programação funcional</p></div>
 </div>
 
-<div class='flex-favicon'>
-<img src="https://d33wubrfki0l68.cloudfront.net/c477d7eb7fdf2c3d75637cfe19ff4a4d0a107bcf/017d0/css/images/hex/tibble.png" width="100px" float='left'>
-<div><p>tibble: </p></div>
-</div>
 
 <div class='flex-favicon'>
 <img src="https://d33wubrfki0l68.cloudfront.net/45fd04ad9cdb2159fea08d07dbc11e742d68e4e3/df327/css/images/hex/stringr.png" width="100px" float='left'>
@@ -118,12 +119,20 @@ class: middle
 <img src="https://d33wubrfki0l68.cloudfront.net/412a6f14518ab633a94221dda7e16cf22e43a763/91620/css/images/hex/forcats.png" width="100px" float='left'>
 <div><p>forcats: Lidar com fatores</p></div>
 </div>
+
+<div class='flex-favicon'>
+<img src="https://d33wubrfki0l68.cloudfront.net/c477d7eb7fdf2c3d75637cfe19ff4a4d0a107bcf/017d0/css/images/hex/tibble.png" width="100px" float='left'>
+<div><p>tibble: </p></div>
+</div>
 ]
+
+
+
 ---
 
 ## Tibble `tbl_df`
 
-- Diversas funções do `dplyr` e `tidyr` recebem uma data frame(`data.frame` ou `tbl_df`) e retornam uma tibble 
+- Diversas funções do `dplyr` e `tidyr` recebem uma tibble e retornam uma tibble 
 
 - Tibbles são data frames com melhorias
 
@@ -204,6 +213,9 @@ x %>% mean() %>% round(2) %>% sum(5)
   
 * Para os exemplos:
   * idk yet
+```{r}
+iris <- tibble::as.tibble(iris)
+```
   
   
   
@@ -215,6 +227,10 @@ class: inverse center middle
 install.packages("dplyr")
 library(dplyr)
 ```
+```{r include=FALSE}
+library(dplyr)
+```
+
 ---
 
 ## `dplyr()`
@@ -232,53 +248,92 @@ library(dplyr)
 
 * Seleciona colunas
 
-```{r}
-dados %>% select(a,b,c)
+```{r eval=FALSE}
+iris %>% select(Sepal.Length, Sepal.Width)
+
+iris %>% select(1,2)
 ```
 
-* Exisem funções no `dplyr` que ajudam na seleção das variáveis:
+
+```{r}
+iris %>% select(Sepal.Length:Sepal.Width)
+```
+
+---
+
+<br>
+
+Exisem funções no `dplyr` que ajudam na seleção das variáveis:
   * `starts_with()`: colunas que começam com um prefixo
   * `ends_with()`: colunas que terminam com um sufixo
   * `contains()`: colunas que contêm uma string
   * `last_col()`: última coluna
 
+
 ```{r}
-dados %>% select(starts_with("kh"))
+iris %>% select(starts_with("Petal"))
 ```
 
-* Esta função nos permite retirar colunas da base da seguinte forma
+---
+
+<br>
+
+Esta função nos permite retirar colunas da base da seguinte forma
 ```{r}
-dados %>% select(-a)
+iris %>% select(-Species)
 ```
 
 ---
 ## `relocate()`
 * Muda as posições das colunas
 
-* Podemos colocar uma coluna antes de outra qualquer
+<br>
+Podemos colocar uma coluna antes de outra qualquer
 ```{r}
+iris %>% relocate(Species, .before = Petal.Length)
+```
+---
+<br>
 
+Ou colocar uma coluna depois de outra qualquer
+
+```{r}
+iris %>% relocate(Species, .after = Petal.Length)
 ```
 
-* ou colocar uma coluna antes de outra qualquer
-```{r}
-
-```
+<br>
+.footnote[ **Obs:** Se nenhum dos argumentos (`.before` ou `.after`) for fornecido, as colunas especificadas serão colocadas no começo da base
+]
 
 ---
 
 ## `arrange()`
 
 * Orderna linhas 
-
+  * Se a variável for categórica ordena por ordem alfabética
+  * Se a variável for numérica ordena do menor para o maior
+  * Se a varíavel for um fator, ordena pelos níveis do fator
+  
 ```{r}
-
+iris %>% arrange(Sepal.Length)
 ```
 
-* Também podemos ordenar as linhas de forma decrescente usando a função `desc()`
+---
+<br>
+
+Podemos ordenar as linhas de forma decrescente usando a função `desc()`
 
 ```{r}
-#ordenar por mais vars
+iris %>% arrange(desc(Sepal.Length))
+```
+
+---
+
+<br>
+É também possível ordenar mais de uma coluna de uma vez
+
+```{r}
+iris %>% arrange(Species, Sepal.Length)
 ```
 
 ---
@@ -288,47 +343,160 @@ dados %>% select(-a)
 * Filtra linhas
 
 ```{r}
-dados <- filter(a>2)
+iris %>% filter(Petal.Length <= 2)
 ```
-
-* Podemos fazer qualquer tipo de operação dentro do filter, contanto que a operação retorne TRUE/FALSE
-
-```{r}
-dados$a > 2
-```
-<img src="slides/imgs/logical_ops.png" width="300px">
 ---
 
-*Podemos filtrar mais de duas colunas
+<br>
+Podemos filtrar mais de duas colunas
 
 ```{r}
-filter(a == "oi", a == "kk")
+iris %>% filter(Species == "setosa", Sepal.Length <= 5)
 ```
-ou
+
+---
+
+<br> 
+Usualmente queremos selecionar mais de uma categoria dentro do filter
 ```{r}
-filter(a %in% c("oi","kk"))
+iris %>% filter(Species %in% c("setosa", "versicolor"))
 ```
+---
+<br>
+
+Qualquer tipo de operação pode ser feita dentro do filter, contanto que esta operação retorne TRUE/FALSE
+
+```{r}
+c(0,1,2,3,4) > 2
+```
+
+<br>
+
+Principais testes lógicos
+
+.pull-left[
+* **<**  menor que
+* **>** maior que
+* **<=**  menor igual a
+* **>** maior igual a
+* **==** igual a
+* **%in%** faz parte de um grupo
+* **is.na()** é NA
+]
+
+.pull-right[
+* **&** e
+* **|** ou
+* **!** diferente de
+]
 
 ---
 ## `mutate()`
 
 * Modifica e cria colunas
 
-##### Modificando
+Modificando...
 ```{r}
-mutate(a)
+iris %>%
+  mutate(
+    Sepal.Length = Sepal.Length*10, Sepal.Width = Sepal.Width*10,
+    Petal.Length = Petal.Length*10, Petal.Width = Petal.Width*10
+  )
+```
+---
+<br>
+Criando...
+```{r}
+iris %>% 
+  mutate(
+    Sepal.Length_mm = Sepal.Length*10, Sepal.Width_mm = Sepal.Width*10,
+    Petal.Length_mm = Petal.Length*10, Petal.Width_mm = Petal.Width*10
+  )
 ```
 
-##### Criando
-```{r}
-mutate(a_modificado)
-```
-
-* Podemos fazer qualquer operação contanto que o seu resultado retorne um vetor o mesmo comprimento das linhas da base ou de comprimento 1 
+---
+<br>
+Podemos fazer qualquer operação contanto que o seu resultado retorne um vetor o mesmo comprimento das linhas da base ou de comprimento 1 
 
 ```{r}
-mutate(b = "oi")
+iris %>% 
+  mutate(unidade_medida = "cm") %>%
+  relocate(unidade_medida)
 ```
+---
+
+#### Funções do dplyr úteis:
+
+```{r}
+df <- tibble::tibble(
+  var = c(1, 2, 3, 2, 4, 5, -1)
+)
+```
+
+* if_else: retorna valor dependendo de um teste lógico
+```{r}
+df %>% 
+  mutate(
+    var2 = if_else(var >= 0, "yay", ":(")
+  )
+```
+
+---
+<br>
+* case_when: generalização do if_else()
+```{r}
+df %>% 
+  mutate(
+    var2 = case_when(
+      var < 0 ~ ":(",
+      var < 4 ~ "yay",
+      TRUE ~ "ok.."
+    )
+  )
+```
+
+<br>
+.footnote[
+**Obs1:** A ordem das condições é importante (a segunda condição verifica se `0 <= var < 4`)
+
+**Obs2:** O `TRUE` significa que caso as observações não entrem nas condições anteriores a função retorna o valor do lado direito
+]
+---
+<br>
+* lag: devolve valor defasado
+* lead: devolve o valor futuro
+
+```{r}
+df %>% 
+  mutate(
+    var2 = lag(var),
+    var3 = lead(var)
+  )
+```
+
+---
+<br>
+* n: retorna o tamanho do grupo
+* n_distinct: retorna o número de valores distintos
+
+```{r}
+df %>% 
+  mutate(
+    var2 = n(),
+    var3 = n_distinct(var)
+  )
+```
+---
+<br>
+* na_if: converte um valor em NA
+
+```{r}
+df %>% 
+  mutate(
+    var2 = na_if(var, -1)
+  )
+```
+
 ---
 ## `transmute()`
 
@@ -338,11 +506,24 @@ mutate(b = "oi")
 
 * As linhas avaixo são equivalentes
 ```{r}
-mutate() %>% select()
+iris %>% mutate(
+    Sepal.Length_mm = Sepal.Length*10,
+    Sepal.Width_mm = Sepal.Width*10,
+    Petal.Length_mm = Petal.Length*10,
+    Petal.Width_mm = Petal.Width*10
+  ) %>% 
+  select(
+    Sepal.Length_mm, Sepal.Width_mm, Petal.Length_mm, Petal.Width_mm
+  )
 ```
 
 ```{r}
-transmute()
+iris %>% transmute(
+    Sepal.Length_mm = Sepal.Length*10,
+    Sepal.Width_mm = Sepal.Width*10,
+    Petal.Length_mm = Petal.Length*10,
+    Petal.Width_mm = Petal.Width*10
+  )
 ```
 
 ---
@@ -356,9 +537,31 @@ transmute()
   * frequências absolutas
   
 ```{r}
-
+iris %>% 
+  summarise(
+    media_sepal_lenght = mean(Sepal.Length),
+    sd_sepal_lenght = sd(Sepal.Length),
+    media_sepal_width = mean(Sepal.Width),
+    sd_sepal_width = sd(Sepal.Width),
+    n = n()
+  )
 ```
 
+---
+## `group_by()`
+
+* O `group_by()` em si não faz nenhuma alteração notável na base
+
+```{r}
+iris %>% group_by(Species)
+```
+
+ Junto com outras funções como `mutate()` ou `summarise()`, o `group_by()` muda o escopo da função
+  * trata cada grupo como se fossem bases distintas
+  * executa o código separadamente para cada grupo
+
+<br>
+.footnote[**Obs:** é importante lembrar de desagrupar (`ungroup()`) os dados caso você continuar fazendo mudanças na base]
 ---
 
 ## `group_by() + sumarise()`
@@ -368,23 +571,17 @@ transmute()
 * As medidas resumo serão aplicadas por grupo
 
 ```{r}
-
+iris %>% 
+  group_by(Species) %>% 
+  summarise(
+    media_sepal_lenght = mean(Sepal.Length),
+    sd_sepal_lenght = sd(Sepal.Length),
+    media_sepal_width = mean(Sepal.Width),
+    sd_sepal_width = sd(Sepal.Width),
+    n = n()
+  ) %>% 
+  ungroup()
 ```
-
-
----
-
-* O `group_by()`em si não faz nenhuma alteração notável na base
-
-```{r}
-data %>% group_by()
-```
-
-**Obs:** Junto com outras funções como `mutate()` ou `summarise()`, o `group_by()` muda o escopo da função
-  * trata cada grupo como se fossem bases distintas
-  * executa o código separadamente para cada grupo
-
-
 
 ---
 ## `bind_rows()`
@@ -405,8 +602,8 @@ data %>% group_by()
 ```{r}
 
 ```
-
-**Obs:** Essas colunas devem sempre ter a mesma quantidade de linhas e (pra fazer sentido) elas devem ter as linhas de um data frame correspondendo com as linhas do outro data frame
+<br>
+.footnote[**Obs:** Essas colunas devem sempre ter a mesma quantidade de linhas e (pra fazer sentido) elas devem ter as linhas de um data frame correspondendo com as linhas do outro data frame]
 ---
 
 ## Joins
@@ -454,11 +651,14 @@ data %>% group_by()
 class: inverse center middle
 
 # TIDYR
-```{r}
+```{r eval=FALSE}
 install.packages("tidyr")
 library(tidyr)
 ```
 
+```{r include=FALSE}
+library(tidyr)
+```
 
 ---
 
@@ -571,255 +771,14 @@ iris %>% group_by(Species) %>% nest()
 
 * [Join com dplyr](https://rpubs.com/CristianaFreitas/311735)
 
+* [ slide topp]
 
-<!-- - Ipsum dis nec porttitor urna sed -->
 
-<!-- --- -->
-<!-- name: colors -->
 
-<!-- ## Colors -->
-
-<!-- - <span style="color: var(--text-color)">Text Color</span> -->
-
-<!-- - <span style="color: var(--header-color); font-family: var(--header-font-family);">Header Color</span> -->
-
-<!-- - <span style="color: var(--link-color)">Link Color</span> -->
-
-<!-- - <span style="color: var(--text-bold-color); font-weight: bold;">Bold Color</span> -->
-
-<!-- - `inline code color` -->
-
-<!-- --- -->
-
-<!-- # Big Topic or Inverse Slides `#` -->
-
-<!-- ## Slide Headings `##` -->
-
-<!-- ### Sub-slide Headings `###` -->
-
-<!-- #### Bold Call-Out `####` -->
-
-<!-- This is a normal paragraph text. Only use header levels 1-4. -->
-
-<!-- ##### Possible, but not recommended `#####` -->
-
-<!-- ###### Definitely don't use h6 `######` -->
-
-<!-- --- -->
-<!-- class: inverse center middle -->
-
-<!-- # Topic Changing Interstitial -->
-
-<!-- -- -->
-
-<!-- ``` -->
-<!-- class: inverse center middle -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- layout: true -->
-
-<!-- ## Blocks -->
-
-<!-- --- -->
-
-<!-- ### Blockquote -->
-
-<!-- > This is a blockquote following a header. -->
-<!-- > -->
-<!-- > When something is important enough, you do it even if the odds are not in your favor. -->
-
-<!-- --- -->
-
-<!-- ### Code Blocks -->
-
-<!-- #### R Code -->
-
-<!-- ```{r eval=FALSE} -->
-<!-- ggplot(gapminder) + -->
-<!--   aes(x = gdpPercap, y = lifeExp, size = pop, color = country) + -->
-<!--   geom_point() + -->
-<!--   facet_wrap(~year) -->
-<!-- ``` -->
-
-<!-- #### JavaScript -->
-
-<!-- ```js -->
-<!-- var fun = function lang(l) { -->
-<!--   dateformat.i18n = require('./lang/' + l) -->
-<!--   return true; -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- ### More R Code -->
-
-<!-- ```{r eval=FALSE} -->
-<!-- dplyr::starwars %>% dplyr::slice_sample(n = 4) -->
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- ```{r message=TRUE} -->
-<!-- cli::cli_alert_success("It worked!") -->
-<!-- ``` -->
-
-<!-- -- -->
-
-<!-- ```{r message=TRUE} -->
-<!-- message("Just a friendly message") -->
-<!-- ``` -->
-
-<!-- -- -->
-
-<!-- ```{r warning=TRUE} -->
-<!-- warning("This could be bad...") -->
-<!-- ``` -->
-
-<!-- -- -->
-
-<!-- ```{r error=TRUE} -->
-<!-- stop("I hope you're sitting down for this") -->
-<!-- ``` -->
-
-
-<!-- --- -->
-<!-- layout: true -->
-
-<!-- ## Tables -->
-
-<!-- --- -->
-
-<!-- ```{r} -->
-<!-- tibble::as_tibble(mtcars) -->
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- ```{r} -->
-<!-- knitr::kable(head(mtcars), format = 'html') -->
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- ```{r} -->
-<!-- DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4)) -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- layout: true -->
-
-<!-- ## Lists -->
-
-<!-- --- -->
-
-<!-- .pull-left[ -->
-<!-- #### Here is an unordered list: -->
-
-<!-- *   Item foo -->
-<!-- *   Item bar -->
-<!-- *   Item baz -->
-<!-- *   Item zip -->
-<!-- ] -->
-
-<!-- .pull-right[ -->
-
-<!-- #### And an ordered list: -->
-
-<!-- 1.  Item one -->
-<!-- 1.  Item two -->
-<!-- 1.  Item three -->
-<!-- 1.  Item four -->
-<!-- ] -->
-
-<!-- --- -->
-
-<!-- ### And a nested list: -->
-
-<!-- - level 1 item -->
-<!--   - level 2 item -->
-<!--   - level 2 item -->
-<!--     - level 3 item -->
-<!--     - level 3 item -->
-<!-- - level 1 item -->
-<!--   - level 2 item -->
-<!--   - level 2 item -->
-<!--   - level 2 item -->
-<!-- - level 1 item -->
-<!--   - level 2 item -->
-<!--   - level 2 item -->
-<!-- - level 1 item -->
-
-<!-- --- -->
-
-<!-- ### Nesting an ol in ul in an ol -->
-
-<!-- - level 1 item (ul) -->
-<!--   1. level 2 item (ol) -->
-<!--   1. level 2 item (ol) -->
-<!--     - level 3 item (ul) -->
-<!--     - level 3 item (ul) -->
-<!-- - level 1 item (ul) -->
-<!--   1. level 2 item (ol) -->
-<!--   1. level 2 item (ol) -->
-<!--     - level 3 item (ul) -->
-<!--     - level 3 item (ul) -->
-<!--   1. level 4 item (ol) -->
-<!--   1. level 4 item (ol) -->
-<!--     - level 3 item (ul) -->
-<!--     - level 3 item (ul) -->
-<!-- - level 1 item (ul) -->
-
-<!-- --- -->
-<!-- layout: true -->
-
-<!-- ## Plots -->
-
-<!-- --- -->
-
-<!-- ```{r plot-example} -->
-<!-- library(ggplot2) -->
-<!-- (g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point()) -->
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- ```{r plot-example-themed} -->
-<!-- g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) + -->
-<!--   ggtitle("A Plot About Cars") -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- layout: false -->
-
-<!-- ## Square image -->
-
-<!-- <center><img src="https://octodex.github.com/images/labtocat.png" height="400px" /></center> -->
-
-<!-- .footnote[GitHub Octocat] -->
-
-<!-- --- -->
-
-<!-- ### Wide image -->
-
-<!-- ![](https://guides.github.com/activities/hello-world/branching.png) -->
-
-<!-- .footnote[Wide images scale to 100% slide width] -->
-
-<!-- --- -->
-
-<!-- ## Two images -->
-
-<!-- .pull-left[ -->
-<!-- ![](https://octodex.github.com/images/motherhubbertocat.png) -->
-]
-
-]
 
 ---
 class: center, middle
 
 # Obrigada!
-
+.footnote[GitHub Octocat]
 
